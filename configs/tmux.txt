@@ -1,0 +1,36 @@
+Создать новую сессию 
+tmux new-session -s test
+Выйти из сессии
+Ctr b + d
+Подключиться к существующей сессии
+tmux attach -t test
+Переименовать окно
+Ctr b + ,
+Включить мышку (в конфиге)
+Ctr b + m
+Изменить размер pane
+Ctr b + :
+resize-pane -(DULR) 10 // D - down, L - left R - right U - up
+Для копирования из одного pane
+Сtr b + enther
+и копируем мышкой
+q - выйти из режима копироваания
+
+Создать новое окно
+Ctr b + c 
+Перемещаться по окнам
+Ctr b + n
+Разделить окно вертикально
+Ctr b + %
+Разделить окно горизонтально
+Ctr b + "
+Перемещаться по окнам
+Ctr b + стрелочки
+
+Базовый конфиг
+https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbkRpVjY4cHR2OWxjeWxLVm52d1kwUmdxd2ZaZ3xBQ3Jtc0tsYk1hU3JuY3ZuSXVVRDVRR21BYlRGVlJISU1vZGlMOWtvWXlkdWtqX2VxcUxmWjBhbHBQZXBPaXVSZ2tmM1NFdHh1VHFNZmszWGt2YjJwbjlUS3RDWkUzSVNpdzVWWmMtSlEwU2tZMUNCVnNmekRWRQ&q=https%3A%2F%2Fgithub.com%2Fgpakosz%2F.tmux
+
+$ cd
+$ git clone https://github.com/gpakosz/.tmux.git
+$ ln -s -f .tmux/.tmux.conf
+$ cp .tmux/.tmux.conf.local .

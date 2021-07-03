@@ -1,0 +1,48 @@
+#настройка темы
+https://github.com/unix121/i3wm-themer
+./install_ubuntu.sh // установит все для убунту
+
+sudo apt install fonts-font-awesome // установка иконок для i3-status
+
+вывод текущей раскладки в i3status
+
+вывод раскладка с помощью утилиты с гитхаб:
+
+https://github.com/nonpop/xkblayout-state
+
+в /home/user делаем папку bin
+
+делаем make, если не выходит:
+
+sudo apt install g++
+sudo apt install libx11-dev 
+
+команда для вывода раскладки
+./xkblayout-state print "%s"
+ 
+в scripts i3status-wrapper.sh
+вставляем
+body=`/home/m/bin/./xkblayout-state print "%s"`
+
+настройка яркости в i3
+
+.config/i3/config
+
+bindsym XF86MonBrightnessUp exec xbacklight -inc 6
+bindsym XF86MonBrightnessDown exec xbacklight -dec 6
+
+если xbacklight не установлен, то устонавливаем
+
+далее проверяем /etc/X11/xorg.conf
+
+если его нет, создаем и вставляем:
+
+Section "Device"
+Identifier  "Card0"
+Driver      "intel"
+Option      "Backlight"  "NAME OF THE FOLDER" //acpi_video0 or intel_backlight
+EndSection
+
+acpi_video0 or intel_backlight - проверяем /sys/class/backlight
+
+далее reboot

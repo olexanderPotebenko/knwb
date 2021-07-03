@@ -1,0 +1,247 @@
+Olexander
+olexander.potebenko@gmail.com
+gVbNmuNa3vhTVkB
+
+https://linuxthebest.net/en/kak-ustanovit-utorrent-v-ubuntu-16-0417-04/
+
+В этой статье, я покажу вам, как установить uTorrent в Ubuntu 16.04 LTS и Ubuntu 17.04 . Статья также включает в себя инструкции о том, как настроить обратный прокси-сервер с помощью Nginx/Apache и автоматический запуск сервера uTorrent в Ubuntu.
+
+μTorrent  это BitTorrent-клиент для Windows, macOS, Linux (веб-интерфейс) и Android, написанный на C++ и отличающийся небольшим размером и высокой скоростью работы при достаточно большой функциональности.
+
+Как было описано выше, uTorrent в операционных системах Linux, работает только в веб-интерфейсе, и сегодня мы попробуем его установить.
+Как установить uTorrent в Ubuntu 16.04 LTS и Ubuntu 17.04
+
+uTorrent клиент для Linux представляет собой веб-приложение. Последняя версия была выпущена для Ubuntu 13.04, но мы все еще можем запустить его в Ubuntu 16.04 LTS и Ubuntu 17.04.
+
+Вам потребуется перейти на официальную страницу загрузки, чтобы загрузить пакет сервера uTorrent для Ubuntu 13.04. Но также, вы можете использовать следующую команду, для загрузки его через терминал.
+
+Откройте терминал(Ctrl+Alt+T), и введите команду
+
+Для 64bit систем
+
+wget http://download.ap.bittorrent.com/track/beta/endpoint/utserver/os/linux-x64-ubuntu-13-04 -O utserver.tar.gz
+
+Для 32bit систем
+
+wget http://download.ap.bittorrent.com/track/beta/endpoint/utserver/os/linux-i386-ubuntu-13-04 -O utserver.tar.gz
+
+После загрузки, также изменим рабочий каталог, где хранится сервер uTorrent. Затем выполните следующую команду, чтобы извлечь из архива tar.gz, файлы в каталог /opt.
+
+sudo tar xvf utserver.tar.gz -C /opt/
+
+Установите необходимые зависимости
+
+sudo apt install libssl1.0.0 libssl-dev
+
+Затем создать символическую ссылку.
+
+sudo ln -s /opt/utorrent-server-alpha-v3_3/utserver /usr/bin/utserver
+
+Используйте следующую команду для запуска сервера uTorrent. По умолчанию сервер uTorrent прослушивает 0.0.0.0:8080. Так что, если есть еще одна услуга, которая также прослушивает порт 80, вы должны временно остановить эту службу. uTorrent также будет использовать порт 10000 и 6881.
+
+utserver -settingspath /opt/utorrent-server-alpha-v3_3/ &
+
+Теперь откройте ваш браузер(не важно, будет это Firefox или Google Chrome), и введите в адресной строке
+
+    ваш-сервер-ip:8080/gui
+
+    Если вы устанавливаете uTorrent на локальном компьютере, замените ваш-сервер-ip на localhost.
+
+        localhost:8080/gui
+
+        Пожалуйста, обратите внимание, что /gui необходимо в URL, в противном случае вы столкнетесь с недопустимой ошибкой запроса. При запросе имени пользователя и пароля, введите admin в поле имени пользователя, а пароль оставьте пустым.
+
+        utorrent
+
+        При запуске веб-клиента, измените язык интерфейса, на тот который будет удобен вам, нажав на значок шестеренки.
+
+        utorrent
+
+        Также вам потребуется изменить логин и пароль, для этого перейдите на вкладку Web интерфейс, там вы сможете изменить как имя пользователя, так и пароль, который будет более безопасным, чем при использовании admin в качестве имени пользователя.
+
+        utorrent
+
+         
+
+         После всех процедур, вы можете спокойно загружать торренты, и вам больше не понадобятся сторонние приложения.
+
+         utorrent
+         Настройка обратного прокси-сервера Nginx
+
+         Чтобы получить доступ к серверу uTorrent с удаленного подключения с использованием доменного имени, вы можете настроить обратный прокси-сервер Nginx.
+
+         Конфигурация Подкаталог
+
+         Если в вашей Ubuntu уже есть веб-сайт, обслуживаемый Nginx, то вы можете настроить существующий блок сервера Nginx, и вы сможете получить доступ к веб-интерфейсу uTorrent, из поддиректории вашего доменного имени.
+
+         sudo nano /etc/nginx/conf.d/your-website.conf
+
+         В блоке сервера, вставьте следующие директивы. Если вы до этого изменили порт, то вам необходимо изменить его здесь.
+
+         location /gui {
+                        proxy_pass http://localhost:8080;
+                                      proxy_set_header Host $http_host;
+                                                    proxy_set_header X-Real-IP $remote_addr;
+                                                                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                                                                                proxy_set_header X-Forwarded-Proto $scheme;
+                                                                                        }
+
+                                                                                        Сохраните и закройте файл. Затем проверьте конфигурацию Nginx.
+
+                                                                                        sudo nginx -t
+
+                                                                                        Если проверка прошла успешно, перезагрузите Nginx.
+
+                                                                                        sudo systemctl reload nginx
+
+                                                                                        Теперь вы можете получить доступ к веб-интерфейс uTorrent введя в браузере
+
+                                                                                        ваш-домен.com/gui
+
+                                                                                        Если же у вас нету существующего сайта, то вы должны создать новый файл сервера, а также установить Nginx в Ubuntu.
+                                                                                        Установка Nginx на Ubuntu 16.04 или Ubuntu 17.04
+
+                                                                                        sudo apt install nginx
+
+                                                                                        Запустите веб-сервер Nginx.
+
+                                                                                        sudo systemctl start nginx
+
+                                                                                        Затем создайте новый файл блока сервера в /etc/nginx/conf.d/ каталоге.
+
+                                                                                        sudo nano /etc/nginx/conf.d/utserver-proxy.conf
+
+                                                                                        Вставьте следующий текст в файл. Замените utorrent.ваш-домен.com на предпочитаемый субдомен, и не забудьте создать запись для него.
+
+                                                                                        server {
+                                                                                                 listen 80;
+                                                                                                        server_name utorrent.ваш-домен.com;
+
+                                                                                                               location /gui {
+                                                                                                                              proxy_pass http://localhost:8080;
+                                                                                                                                            proxy_set_header Host $http_host;
+                                                                                                                                                          proxy_set_header X-Real-IP $remote_addr;
+                                                                                                                                                                        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                                                                                                                                                                                      proxy_set_header X-Forwarded-Proto $scheme;
+                                                                                                                                                                                              }
+                                                                                                                                                                                              }
+
+                                                                                                                                                                                              Сохраните и закройте файл. Затем проверьте конфигурацию Nginx.
+
+                                                                                                                                                                                              sudo nginx -t
+
+                                                                                                                                                                                              Если проверка прошла успешно, перезагрузите Nginx.
+
+                                                                                                                                                                                              sudo systemctl reload nginx
+
+                                                                                                                                                                                              Теперь вы можете получить доступ к веб-интерфейсу введя в адресной строке браузера
+
+                                                                                                                                                                                              utorrent.ваш-домен.com/gui
+
+                                                                                                                                                                                              Установка и настройка Apache
+
+                                                                                                                                                                                              Если вы используете веб-сервер Apache, а не Nginx, то следуйте приведенным ниже инструкциям, чтобы установить Apache и настроить обратный прокси-сервер.
+
+                                                                                                                                                                                              Для установки Apache, откройте терминал, и введите команду
+
+                                                                                                                                                                                              sudo apt install apache2
+
+                                                                                                                                                                                              Для того, чтобы использовать Apache в качестве обратного прокси-сервера, необходимо включить proxy модули, а также включить rewrite модуль.
+
+                                                                                                                                                                                              sudo a2enmod proxy proxy_http rewrite
+
+                                                                                                                                                                                              Затем создайте файл виртуального хоста для uTorrent.
+
+                                                                                                                                                                                              sudo nano /etc/apache2/sites-available/utorrent.conf
+
+                                                                                                                                                                                              Поместите следующие конфигурации в файл. Замените utorrent.ваш-домен.com на ваше доменное имя.
+
+                                                                                                                                                                                              <VirtualHost *:80>
+                                                                                                                                                                                                  ServerName utorrent.ваш-домен.com
+
+                                                                                                                                                                                                      RewriteEngine on
+                                                                                                                                                                                                          RewriteRule ^/gui(/?)(.*)$ /$2 [PT]
+
+                                                                                                                                                                                                              ProxyPreserveHost on
+                                                                                                                                                                                                                  ProxyPass / http://127.0.0.1:8080/gui/
+                                                                                                                                                                                                                      ProxyPassReverse / http://127.0.0.1:8080/gui/
+                                                                                                                                                                                                                      </VirtualHost>
+
+                                                                                                                                                                                                                      Сохраните и закройте файл. Затем включите этот виртуальный хост.
+
+                                                                                                                                                                                                                      sudo a2ensite utorrent.conf
+
+                                                                                                                                                                                                                      Перезапустите Apache для того, чтобы изменения вступили в силу.
+
+                                                                                                                                                                                                                      sudo systemctl restart apache2
+
+                                                                                                                                                                                                                      Теперь вы можете получить удаленный доступ к серверу Utorrent, введя субдомен (utorrent.ваш-домен.com) в адресной строке браузера. Если веб-интерфейс не загружается, то вам, возможно, потребуется удалить файл виртуального хоста и перезапустить веб-сервер Apache.
+                                                                                                                                                                                                                      Автостарт сервера в Ubuntu
+
+                                                                                                                                                                                                                      Чтобы включить автоматический запуск, мы можем создать Systemd службы.
+
+                                                                                                                                                                                                                      sudo nano /etc/systemd/system/utserver.service
+
+                                                                                                                                                                                                                      Поместите следующий текст в файл.
+
+                                                                                                                                                                                                                      [Unit]
+                                                                                                                                                                                                                      Description=uTorrent Server
+                                                                                                                                                                                                                      After=network.target
+
+                                                                                                                                                                                                                      [Service]
+                                                                                                                                                                                                                      Type=simple
+                                                                                                                                                                                                                      User=utorrent
+                                                                                                                                                                                                                      Group=utorrent
+                                                                                                                                                                                                                      ExecStart=/usr/bin/utserver -settingspath /opt/utorrent-server-alpha-v3_3/ &
+                                                                                                                                                                                                                      ExecStop=/usr/bin/pkill utserver
+                                                                                                                                                                                                                      Restart=always
+                                                                                                                                                                                                                      SyslogIdentifier=uTorrent Server
+
+                                                                                                                                                                                                                      [Install]
+                                                                                                                                                                                                                      WantedBy=multi-user.target
+
+                                                                                                                                                                                                                      Сохраните и закройте файл. Затем перезагрузите Systemd.
+
+                                                                                                                                                                                                                      sudo systemctl daemon-reload
+
+                                                                                                                                                                                                                      Обратите внимание , что рекомендуется не запускать сервер Utorrent как root, и мы указали в файле службы, что сервер uTorrent должен работать в качестве пользователя и группы, которые не имеют привилегий суперпользователя. Для этого создадим системного пользователя и группу.
+
+                                                                                                                                                                                                                      sudo adduser --system --no-create-home utorrent
+
+                                                                                                                                                                                                                      sudo addgroup --system utorrent
+
+                                                                                                                                                                                                                      Добавьте utorrent пользователя в utorrent группу.
+
+                                                                                                                                                                                                                      sudo adduser utorrent utorrent
+
+                                                                                                                                                                                                                      Затем остановите текущий сервер Utorrent.
+
+                                                                                                                                                                                                                      sudo pkill utserver
+
+                                                                                                                                                                                                                      Используйте Systemd службу для запуска сервера Utorrent.
+
+                                                                                                                                                                                                                      sudo systemctl start utserver
+
+                                                                                                                                                                                                                      Включение автоматического запуска во время загрузки.
+
+                                                                                                                                                                                                                      sudo systemctl enable utserver
+
+                                                                                                                                                                                                                      Теперь проверьте utserver статус.
+
+                                                                                                                                                                                                                      systemctl status utserver
+
+                                                                                                                                                                                                                      Эта команда покажет нам, что автозапуск включен и сервер Utorrent работает.
+                                                                                                                                                                                                                      Как удалить uTorrent
+
+                                                                                                                                                                                                                      Чтобы удалить uTorrent из вашей системы, сначала остановите текущий процесс uTorrent.
+
+                                                                                                                                                                                                                      sudo pkill utserver
+
+                                                                                                                                                                                                                      Затем удалите каталог установки.
+
+                                                                                                                                                                                                                      sudo rm -r /opt/utorrent-server-alpha-v3_3/
+
+                                                                                                                                                                                                                      И удалите символическую ссылку.
+
+                                                                                                                                                                                                                      sudo rm /usr/bin/utserver
+

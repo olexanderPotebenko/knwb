@@ -1,0 +1,3 @@
+добавить search egine
+Add custom search engine - подключить это расширение
+https://www.google.com/search?q=%s - задать эту строку
