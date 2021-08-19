@@ -46,3 +46,4 @@ EndSection
 acpi_video0 or intel_backlight - проверяем /sys/class/backlight
 
 далее reboot
+
