@@ -92,3 +92,15 @@ Head
 Merge двух <Link key={1} /> с одинаковым ключем
 
 <link rel="preconnect"
+
+### React Component
+npm i -D @types/classnames
+
+type Dif = Omit<ComponentProps1, keyof ComponentProps2>;
+
+Описание пропрсов кнопки:
+extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
+
+##
+Работа с svg
+npm i -D @svgr/webpack - for transform svg into React components
