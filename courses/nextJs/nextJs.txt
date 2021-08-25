@@ -1,0 +1,192 @@
+###
+Репозиторий курса:
+https://github.com/AlariCode/top-app-demo
+
+###
+Установка nvm: 
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+
+source .bashrc
+
+nvm install <version number>
+
+nvm use <version number>
+
+###
+TypeScript
+
+Инициализация файла:
+tsc --init
+
+##
+Interface & Type
+
+#
+Interface
+1)Interface могут наследоваться:
+
+interface IOne extends ITwo {
+}
+
+2) 
+interface IOne {
+  a: number;
+}
+interface IOne {
+  b: number;
+}
+
+equilent 
+interface IOne {
+  a: number;
+  b: number;
+}
+
+Interface более предпочтительны
+
+#
+Type
+type Three = One & Three;
+
+Type предпочтительны для союзов:
+
+type keys = 'key1' | 'key2' | 'key3'
+
+##
+Genericks
+
+<T> Generics type
+function f<T>(val: T): T {
+}
+
+f('string');
+f('number');
+
+###
+JSX
+
+###
+Развертка проекта
+
+npx create-nex-app
+touch tsconfig.jcon
+npm i -D typescript @types/react @types/node 
+
+##
+Настройка eslint
+
+npm i -D eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin
+touch .eslintrc
+
+#Настройка stylelint
+npm i -D stylelint stylelint-config-standard stylelint-order stylelint-order-config-standard
+
+touch .stylelintrc.json
+
+###
+Структура проекта craate-next-app
+
+##
+pages
+содержит только страницы
+
+##
+Head
+Тег Head from 'next/head' содержит в себе элементы, которые отобразятся в head страницы
+Merge двух <Link key={1} /> с одинаковым ключем
+
+<link rel="preconnect"
+
+### React Component
+npm i -D @types/classnames
+
+type Dif = Omit<ComponentProps1, keyof ComponentProps2>;
+
+Описание пропрсов кнопки:
+extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
+
+##
+Работа с svg
+npm i -D @svgr/webpack - for transform svg into React components
+
+##
+Работа с датой
+npm i date-fns
+
+###
+Переменные окружения
+
+Файлы .env:
+.env - для всех окружений, не содержит секретные данные
+.env.local - (.gitignore) - локальная разработка
+.env.development - для dev окружения (npm run dev)
+.env.production - для prod (npm start)
+.env.test.local - (.gitignore) - окружение запуска тестов, содержит тестовые данные 
+.env.test -  тесты
+
+## 
+Доступность
+* server - Все переменные доступны
+* runtime - В рантайме доступны имменованные с префиксом NEXT_PUBLIC_
+* tests - Доступны через функцию loadEnvConfig from '@next/env'
+
+### 
+SSR & CSR
+
+Рендеринг браузера без фреймворка:
+Загрузка HTML -> CSS -> RENDER -> JS
+Рендеринг браузера c фреймворком:
+Загрузка HTML -> CSS -> JS -> RENDER 
+
+## 
+Сравнение SSR и CSR
+'ssr&csr.png'
+#-----#--------------------------------------------------------------------------------------------------------------------------------------------
+# CSR # empty HTML| -> | CSS               | -> | JS  | -> | JS Parse & Execution | -> | RENDER |    |                      |    |                 |
+#-----#-----------|----|-------------------|----|-----|----|----------------------|----|--------|----|----------------------|----|-----------------|
+# SSR # SSR       | -> | HTML with content | -> | CSS | -> |  RENDER              | -> | JS     | -> | JS Parse & Execution | -> | App GIDRATATION |
+#-----#--------------------------------------------------------------------------------------------------------------------------------------------
+
+Гидратация - добавление методов, обработчиков, эдементов
+
+Проблемы SSR: 
+- Рендер на сервере на каждый запрос           - КЕШИРОВАНИЕ
+- Полная перезагрузка страници при смене route - 
+
+Плюсы SSR:
+- SEO friendly
+- Firs Contentful Paint
+- Прирост производительности на слабых утройствах
+
+##
+NextJs опции:
+1) SSR
+2) Кеширование страниц (на этапе build) + Обновление кеша (инвалидация) после build
+
+Формы пререндера:
+1) Static Generation - контент рендериться предварительно
+  getStaticProps
+  getStaticPath
+2) SSR
+  getServerSideProps
+Функции исполняються исключительно на сервере
+Доступны исключительно в pages
+
+#
+getStaticProps - получает данные для статической генерации
+Применение:
+- Данные для рендера доступны во время сборки
+- Данные могут быть публично закешированы
+- Страница доступна для индексирования
+
+#
+getStaticPath - получает данные для статической генерации
+Применение:
+- Для рендера страниц с динамическими адресами
+
+#
+getServerSideProps - выполняет пререндер для каждого запроса
+Применение:
+- Для рендера страниц во время запроса
+
+
