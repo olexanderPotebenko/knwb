@@ -1,0 +1,4 @@
+To see how a web page looks and behaves when JavaScript is disabled:
+
+- Open Chrome DevTools.
+- Press Control+Shift+P to open the Command Menu.
