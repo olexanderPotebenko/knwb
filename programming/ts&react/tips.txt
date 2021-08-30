@@ -1,0 +1,34 @@
+https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/function_components
+###
+React.ReactNode vs JSX.Element
+If return type must be JSX.Element, return JSX.Element
+
+children1: JSX.Element; // bad, doesnt account for arrays
+  children2: JSX.Element | JSX.Element[]; // meh, doesn't accept strings
+  children3: React.ReactChildren; // despite the name, not at all an appropriate type; it is a utility
+  children4: React.ReactChild[]; // better, accepts array children
+  children: React.ReactNode; // best, accepts everything (see edge case below)
+
+###
+Interface vs Types
+always use interface for public API's definition when authoring a library or 3rd party ambient type definitions, as this allows a consumer to extend them via declaration merging if some definitions are missing:
+- library
+- api
+- types who can be extended
+
+consider using type for your React Component Props and State, for consistency and because it is more constrained.
+- props
+- state
+- React Component
+
+(https://medium.com/@martin_hotell/interface-vs-type-alias-in-typescript-2-7-2a8f1777af4c)
+
+Type cannot be re-opened to add new properties
+A type cannot be changed after being created
+Interfaces will always be named
+Type aliases may not participate in declaration merging
+
+USE INTERFACE UNTIL YOU NEED TYPE
+###
+
+
